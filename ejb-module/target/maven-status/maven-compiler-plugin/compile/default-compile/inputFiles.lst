@@ -1,1 +1,6 @@
-C:\Users\fonte\Documents\Projects\Java\testes\bip-teste-integrado\ejb-module\src\main\java\com\example\ejb\BeneficioEjbService.java
+C:\Users\fonte\Documents\Projects\Java\testes\clone\bip-teste-integrado\ejb-module\src\main\java\com\example\ejb\dao\BeneficioDAO.java
+C:\Users\fonte\Documents\Projects\Java\testes\clone\bip-teste-integrado\ejb-module\src\main\java\com\example\ejb\dao\GenericDAO.java
+C:\Users\fonte\Documents\Projects\Java\testes\clone\bip-teste-integrado\ejb-module\src\main\java\com\example\ejb\exception\EntityNotFoundException.java
+C:\Users\fonte\Documents\Projects\Java\testes\clone\bip-teste-integrado\ejb-module\src\main\java\com\example\ejb\exception\TransferException.java
+C:\Users\fonte\Documents\Projects\Java\testes\clone\bip-teste-integrado\ejb-module\src\main\java\com\example\ejb\model\Beneficio.java
+C:\Users\fonte\Documents\Projects\Java\testes\clone\bip-teste-integrado\ejb-module\src\main\java\com\example\ejb\service\BeneficioEjbService.java

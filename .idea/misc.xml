@@ -5,6 +5,7 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/ejb-module/pom.xml" />
+        <option value="$PROJECT_DIR$/backend-module/src/main/java/com/example/backend/pom.xml" />
       </list>
     </option>
   </component>

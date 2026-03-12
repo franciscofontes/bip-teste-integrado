@@ -1,1 +1,6 @@
-com\example\ejb\BeneficioEjbService.class
+com\example\ejb\service\BeneficioEjbService.class
+com\example\ejb\dao\BeneficioDAO.class
+com\example\ejb\exception\TransferException.class
+com\example\ejb\model\Beneficio.class
+com\example\ejb\dao\GenericDAO.class
+com\example\ejb\exception\EntityNotFoundException.class
