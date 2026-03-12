@@ -3,6 +3,7 @@ package com.example.ejb.dao;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,5 +20,10 @@ public class GenericDAO<T> {
 
     public Optional<T> find(Class<T> entityClass, Object id) {
         return Optional.ofNullable(em.find(entityClass, id));
+    }
+    
+    @Transactional
+    public void save(T t) {
+        em.persist(t);
     }
 }

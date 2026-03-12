@@ -3,7 +3,6 @@ package com.example.ejb.model;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 
 @Entity
 @Table(name = "BENEFICIO")
@@ -25,10 +24,6 @@ public class Beneficio {
     @Column(name = "ATIVO")
     private boolean ativo = true;
 
-    @Version
-    @Column(name = "VERSION")
-    private BigInteger version;
-
     public Beneficio() {
     }
 
@@ -36,14 +31,6 @@ public class Beneficio {
         this.nome = nome;
         this.descricao = descricao;
         this.valor = valor;
-    }
-
-    public Beneficio(String nome, String descricao, BigDecimal valor, boolean ativo, BigInteger version) {
-        this.nome = nome;
-        this.descricao = descricao;
-        this.valor = valor;
-        this.ativo = ativo;
-        this.version = version;
     }
 
     public Long getId() {
@@ -84,13 +71,5 @@ public class Beneficio {
 
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
-    }
-
-    public BigInteger getVersion() {
-        return version;
-    }
-
-    public void setVersion(BigInteger version) {
-        this.version = version;
     }
 }
