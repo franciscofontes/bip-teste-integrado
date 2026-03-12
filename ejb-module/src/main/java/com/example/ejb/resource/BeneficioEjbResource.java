@@ -28,7 +28,7 @@ public class BeneficioEjbResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createItem(Beneficio beneficio) {
+    public Response create(Beneficio beneficio) {
         service.save(beneficio);
         return Response.status(Response.Status.CREATED).build();
     }   

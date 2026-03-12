@@ -23,6 +23,10 @@ public class Beneficio {
 
     @Column(name = "ATIVO")
     private boolean ativo = true;
+    
+    @Version
+    @Column(name = "VERSION")
+    private Long version;
 
     public Beneficio() {
     }
@@ -71,5 +75,13 @@ public class Beneficio {
 
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }
