@@ -18,8 +18,8 @@ public class BeneficioEjbService {
     @Transactional
     public void transfer(Long fromId, Long toId, BigDecimal amount) {
 
-        Beneficio from = findById(fromId);
-        Beneficio to = findById(toId);
+        var from = findById(fromId);
+        var to = findById(toId);
         
         if (amount.compareTo(from.getValor()) > 0) {
             throw new BeneficioException("Saldo insuficiente");

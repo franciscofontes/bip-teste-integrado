@@ -12,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -34,11 +33,11 @@ class BeneficioDAOTest {
 
     @Test
     void shouldReturnBeneficioWhenIdExists() {
-        Beneficio beneficio = new Beneficio(1L, "Beneficio A", "Descrição A", new BigDecimal("1000.00"), true);
+        var beneficio = new Beneficio(1L, "Beneficio A", "Descrição A", new BigDecimal("1000.00"), true);
 
         when(em.find(Beneficio.class, 1L)).thenReturn(beneficio);
 
-        Optional<Beneficio> beneficioOptional = dao.findById(1L);
+        var beneficioOptional = dao.findById(1L);
 
         assertTrue(beneficioOptional.isPresent());
     }
@@ -47,7 +46,7 @@ class BeneficioDAOTest {
     void shouldReturnEmptyWhenIdNotExists() {
         when(em.find(Beneficio.class, 3L)).thenReturn(null);
 
-        Optional<Beneficio> beneficioOptional = dao.findById(3L);
+        var beneficioOptional = dao.findById(3L);
 
         assertTrue(beneficioOptional.isEmpty());
     }
