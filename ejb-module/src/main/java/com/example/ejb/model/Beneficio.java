@@ -26,15 +26,17 @@ public class Beneficio {
     
     @Version
     @Column(name = "VERSION")
-    private Long version;
+    private Long version = 0L;
 
     public Beneficio() {
     }
 
-    public Beneficio(String nome, String descricao, BigDecimal valor) {
+    public Beneficio(Long id, String nome, String descricao, BigDecimal valor, boolean ativo) {
+        this.id = id;
         this.nome = nome;
         this.descricao = descricao;
         this.valor = valor;
+        this.ativo = ativo;
     }
 
     public Long getId() {

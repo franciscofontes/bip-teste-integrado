@@ -2,28 +2,21 @@ package com.example.ejb.dao;
 
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
-import java.util.List;
+
 import java.util.Optional;
 
 @Stateless
-public class GenericDAO<T> {
+public abstract class GenericDAO<T> {
 
-    @PersistenceContext(unitName = "unit")
-    private EntityManager em;
+    protected EntityManager em;
+    private final Class<T> entityClass;
 
-    public List<T> findAll(Class<T> entityClass) {
-        return em.createQuery("SELECT entity FROM " + entityClass.getSimpleName() + " entity", entityClass)
-                .getResultList();
+    public GenericDAO(EntityManager em, Class<T> entityClass) {
+        this.em = em;
+        this.entityClass = entityClass;
     }
 
-    public Optional<T> find(Class<T> entityClass, Object id) {
+    public Optional<T> findById(Object id) {
         return Optional.ofNullable(em.find(entityClass, id));
-    }
-    
-    @Transactional
-    public void save(T t) {
-        em.persist(t);
     }
 }
