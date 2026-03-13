@@ -20,9 +20,9 @@ public class BeneficioEjbService {
 
         var from = findById(fromId);
         var to = findById(toId);
-        
+
         if (amount.compareTo(from.getValor()) > 0) {
-            throw new BeneficioException("Saldo insuficiente");
+            throw new BeneficioException(422, "Saldo insuficiente");
         }
 
         from.setValor(from.getValor().subtract(amount));
@@ -32,6 +32,6 @@ public class BeneficioEjbService {
     }
 
     public Beneficio findById(Long id) {
-        return dao.findById(id).orElseThrow(() -> new BeneficioException("Beneficio não cadastrado"));
-    }   
+        return dao.findById(id).orElseThrow(() -> new BeneficioException(404, "Beneficio não cadastrado"));
+    }
 }

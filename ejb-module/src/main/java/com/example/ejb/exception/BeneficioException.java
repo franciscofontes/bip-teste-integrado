@@ -2,10 +2,17 @@ package com.example.ejb.exception;
 
 import jakarta.ejb.ApplicationException;
 
-@ApplicationException(rollback=true)
+@ApplicationException(rollback = true)
 public class BeneficioException extends RuntimeException {
-    
-    public BeneficioException(String message) { 
-        super(message); 
+
+    private final int status;
+
+    public BeneficioException(int status, String message) {
+        super(message);
+        this.status = status;
+    }
+
+    public int getStatus() {
+        return status;
     }
 }

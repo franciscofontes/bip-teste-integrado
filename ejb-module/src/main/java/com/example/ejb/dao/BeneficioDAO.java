@@ -25,7 +25,7 @@ public class BeneficioDAO extends GenericDAO<Beneficio> {
             em.merge(from);
             em.merge(to);
         } catch (PersistenceException e) {
-           throw new BeneficioException("Erro ao tentar atualizar beneficios");
+           throw new BeneficioException(500, "Erro ao tentar atualizar beneficios");
         }
     }
 

@@ -1,4 +1,4 @@
-package com.example.ejb.resource;
+package com.example.ejb.controller;
 
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;

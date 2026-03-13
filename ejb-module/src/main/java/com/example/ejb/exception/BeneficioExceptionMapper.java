@@ -9,7 +9,7 @@ public class BeneficioExceptionMapper implements ExceptionMapper<BeneficioExcept
 
     @Override
     public Response toResponse(BeneficioException exception) {
-        return Response.status(422)
+        return Response.status(exception.getStatus())
                 .entity(exception.getMessage())
                 .build();
     }

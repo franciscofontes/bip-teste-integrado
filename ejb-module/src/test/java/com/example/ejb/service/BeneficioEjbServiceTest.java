@@ -47,11 +47,12 @@ class BeneficioEjbServiceTest {
     void shouldTransferBeneficiosWhenValid() {
         var from = new Beneficio(1L, "Beneficio A", "Descrição A", new BigDecimal("1000.00"), true);
         var to = new Beneficio(2L, "Beneficio B", "Descrição B", new BigDecimal("500.00"), true);
+        var amount =  new BigDecimal("500.00");
 
         when(dao.findById(1L)).thenReturn(Optional.of(from));
         when(dao.findById(2L)).thenReturn(Optional.of(to));
 
-        service.transfer(1L, 2L, new BigDecimal("500.00"));
+        service.transfer(1L, 2L, amount);
 
         verify(dao, times(1)).updateBeneficios(from, to);
     }
@@ -60,10 +61,11 @@ class BeneficioEjbServiceTest {
     void shouldNotTransferBeneficiosWhenInsufficientFunds() {
         var from = new Beneficio(1L, "Beneficio A", "Descrição A", new BigDecimal("0"), true);
         var to = new Beneficio(2L, "Beneficio B", "Descrição B", new BigDecimal("500.00"), true);
+        var amount =  new BigDecimal("500.00");
 
         when(dao.findById(1L)).thenReturn(Optional.of(from));
         when(dao.findById(2L)).thenReturn(Optional.of(to));
 
-        assertThrows(BeneficioException.class, () -> service.transfer(1L, 2L, new BigDecimal("500.00")));
+        assertThrows(BeneficioException.class, () -> service.transfer(1L, 2L, amount));
     }
 }

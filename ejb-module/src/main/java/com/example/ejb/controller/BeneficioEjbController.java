@@ -1,4 +1,4 @@
-package com.example.ejb.resource;
+package com.example.ejb.controller;
 
 import com.example.ejb.dto.TransferDTO;
 import com.example.ejb.model.Beneficio;
@@ -12,12 +12,12 @@ import jakarta.ws.rs.core.Response;
 
 @Stateless
 @Path("/beneficios")
-public class BeneficioEjbResource {
+public class BeneficioEjbController {
 
     @EJB
     private BeneficioEjbService service;
 
-    public BeneficioEjbResource() {
+    public BeneficioEjbController() {
     }
 
     @POST
@@ -32,7 +32,8 @@ public class BeneficioEjbResource {
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Beneficio find(@PathParam("id") Long id) {
-        return service.findById(id);
+    public Response findById(@PathParam("id") Long id) {
+        Beneficio beneficio = service.findById(id);
+        return Response.ok(beneficio).build();
     }
 }
