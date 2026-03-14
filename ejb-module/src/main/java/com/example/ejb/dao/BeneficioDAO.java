@@ -8,16 +8,13 @@ import jakarta.ejb.TransactionAttributeType;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
+import java.util.Optional;
 
 @Stateless
 public class BeneficioDAO extends GenericDAO<Beneficio> {
 
     @PersistenceContext(unitName = "unit")
     private EntityManager em;
-
-    public BeneficioDAO(EntityManager em, Class<Beneficio> entityClass) {
-        super(em, entityClass);
-    }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void updateBeneficios(Beneficio from, Beneficio to) {
@@ -29,7 +26,13 @@ public class BeneficioDAO extends GenericDAO<Beneficio> {
         }
     }
 
-    public void setEntityManager(EntityManager em) {
-        this.em = em;
+    @Override
+    public Optional<Beneficio> findById(Object id) {
+        return Optional.ofNullable(em.find(Beneficio.class, id));
+    }
+
+    @Override
+    public void save(Beneficio beneficio) {
+        em.persist(beneficio);
     }
 }

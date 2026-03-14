@@ -34,4 +34,8 @@ public class BeneficioEjbService {
     public Beneficio findById(Long id) {
         return dao.findById(id).orElseThrow(() -> new BeneficioException(404, "Beneficio não cadastrado"));
     }
+    
+    public void save(Beneficio beneficio) {
+        dao.save(beneficio);
+    }
 }

@@ -4,7 +4,6 @@ import com.example.ejb.exception.BeneficioException;
 import com.example.ejb.model.Beneficio;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,11 +24,6 @@ class BeneficioDAOTest {
 
     @InjectMocks
     private BeneficioDAO dao;
-
-    @BeforeEach
-    void setUp() {
-        dao = new BeneficioDAO(em, Beneficio.class);
-    }
 
     @Test
     void shouldReturnBeneficioWhenIdExists() {
@@ -56,8 +50,6 @@ class BeneficioDAOTest {
         var from = new Beneficio(1L, "Beneficio A", "Descrição A", new BigDecimal("1000.00"), true);
         var to = new Beneficio(2L, "Beneficio B", "Descrição B", new BigDecimal("500.00"), true);
 
-        dao.setEntityManager(em);
-
         dao.updateBeneficios(from, to);
 
         verify(em, times(1)).merge(from);
@@ -71,7 +63,6 @@ class BeneficioDAOTest {
 
         doThrow(new PersistenceException()).when(em).merge(any());
 
-        dao.setEntityManager(em);
         assertThrows(BeneficioException.class, () -> dao.updateBeneficios(from, to));
     }
 }
