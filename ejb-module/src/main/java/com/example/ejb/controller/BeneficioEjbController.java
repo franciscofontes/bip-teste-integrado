@@ -36,12 +36,4 @@ public class BeneficioEjbController {
         Beneficio beneficio = service.findById(id);
         return Response.ok(beneficio).build();
     }
-    
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response save(@Valid Beneficio beneficio) {
-        service.save(beneficio);
-        return Response.ok("Salvo!").build();
-    }    
 }

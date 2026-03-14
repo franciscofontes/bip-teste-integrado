@@ -30,9 +30,4 @@ public class BeneficioDAO extends GenericDAO<Beneficio> {
     public Optional<Beneficio> findById(Object id) {
         return Optional.ofNullable(em.find(Beneficio.class, id));
     }
-
-    @Override
-    public void save(Beneficio beneficio) {
-        em.persist(beneficio);
-    }
 }
