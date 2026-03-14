@@ -3,6 +3,7 @@ package com.example.ejb.service;
 import com.example.ejb.dao.BeneficioDAO;
 import com.example.ejb.exception.BeneficioException;
 import com.example.ejb.model.Beneficio;
+import com.example.ejb.utils.MockUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,45 +28,52 @@ class BeneficioEjbServiceTest {
 
     @Test
     void shouldReturnBeneficioWhenIdExists() {
-        var beneficioOptional = Optional.of(new Beneficio(1L, "Beneficio A", "Descrição A", new BigDecimal("1000.00"), true));
+        var beneficioOptional = Optional.of(MockUtils.fromFile("beneficio-valid-01.json", Beneficio.class));
+        var id = 1L;
 
-        when(dao.findById(1L)).thenReturn(beneficioOptional);
+        when(dao.findById(id)).thenReturn(beneficioOptional);
 
-        var beneficio = service.findById(1L);
+        var beneficio = service.findById(id);
 
-        assertEquals(1L, (long) beneficio.getId());
+        assertEquals(id, (long) beneficio.getId());
     }
 
     @Test
     void shouldThrowExceptionWhenIdNotExists() {
-        when(dao.findById(3L)).thenThrow(BeneficioException.class);
+        var id = 3L;
 
-        assertThrows(BeneficioException.class, () -> service.findById(3L));
+        when(dao.findById(id)).thenThrow(BeneficioException.class);
+
+        assertThrows(BeneficioException.class, () -> service.findById(id));
     }
 
     @Test
     void shouldTransferBeneficiosWhenValid() {
-        var from = new Beneficio(1L, "Beneficio A", "Descrição A", new BigDecimal("1000.00"), true);
-        var to = new Beneficio(2L, "Beneficio B", "Descrição B", new BigDecimal("500.00"), true);
-        var amount =  new BigDecimal("500.00");
+        var from = MockUtils.fromFile("beneficio-valid-01.json", Beneficio.class);
+        var to = MockUtils.fromFile("beneficio-valid-02.json", Beneficio.class);
+        var fromId = 1L;
+        var toId = 2L;
+        var amount = new BigDecimal("500.00");
 
-        when(dao.findById(1L)).thenReturn(Optional.of(from));
-        when(dao.findById(2L)).thenReturn(Optional.of(to));
+        when(dao.findById(fromId)).thenReturn(Optional.of(from));
+        when(dao.findById(toId)).thenReturn(Optional.of(to));
 
-        service.transfer(1L, 2L, amount);
+        service.transfer(fromId, toId, amount);
 
         verify(dao, times(1)).updateBeneficios(from, to);
     }
 
     @Test
     void shouldNotTransferBeneficiosWhenInsufficientFunds() {
-        var from = new Beneficio(1L, "Beneficio A", "Descrição A", new BigDecimal("0"), true);
-        var to = new Beneficio(2L, "Beneficio B", "Descrição B", new BigDecimal("500.00"), true);
-        var amount =  new BigDecimal("500.00");
+        var from = MockUtils.fromFile("beneficio-insufficient-funds.json", Beneficio.class);
+        var to = MockUtils.fromFile("beneficio-valid-02.json", Beneficio.class);
+        var fromId = 1L;
+        var toId = 2L;
+        var amount = new BigDecimal("500.00");
 
-        when(dao.findById(1L)).thenReturn(Optional.of(from));
-        when(dao.findById(2L)).thenReturn(Optional.of(to));
+        when(dao.findById(fromId)).thenReturn(Optional.of(from));
+        when(dao.findById(toId)).thenReturn(Optional.of(to));
 
-        assertThrows(BeneficioException.class, () -> service.transfer(1L, 2L, amount));
+        assertThrows(BeneficioException.class, () -> service.transfer(fromId, toId, amount));
     }
 }

@@ -2,6 +2,7 @@ package com.example.ejb.dao;
 
 import com.example.ejb.exception.BeneficioException;
 import com.example.ejb.model.Beneficio;
+import com.example.ejb.utils.MockUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;
 import org.junit.jupiter.api.Test;
@@ -9,8 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -27,28 +26,32 @@ class BeneficioDAOTest {
 
     @Test
     void shouldReturnBeneficioWhenIdExists() {
-        var beneficio = new Beneficio(1L, "Beneficio A", "Descrição A", new BigDecimal("1000.00"), true);
 
-        when(em.find(Beneficio.class, 1L)).thenReturn(beneficio);
+        var beneficio = MockUtils.fromFile("beneficio-valid-01.json", Beneficio.class);
+        var id = 1L;
 
-        var beneficioOptional = dao.findById(1L);
+        when(em.find(Beneficio.class, id)).thenReturn(beneficio);
+
+        var beneficioOptional = dao.findById(id);
 
         assertTrue(beneficioOptional.isPresent());
     }
 
     @Test
     void shouldReturnEmptyWhenIdNotExists() {
-        when(em.find(Beneficio.class, 3L)).thenReturn(null);
+        var id = 3L;
 
-        var beneficioOptional = dao.findById(3L);
+        when(em.find(Beneficio.class, id)).thenReturn(null);
+
+        var beneficioOptional = dao.findById(id);
 
         assertTrue(beneficioOptional.isEmpty());
     }
 
     @Test
     void shouldUpdateBeneficiosWhenValid() {
-        var from = new Beneficio(1L, "Beneficio A", "Descrição A", new BigDecimal("1000.00"), true);
-        var to = new Beneficio(2L, "Beneficio B", "Descrição B", new BigDecimal("500.00"), true);
+        var from = MockUtils.fromFile("beneficio-valid-01.json", Beneficio.class);
+        var to = MockUtils.fromFile("beneficio-valid-02.json", Beneficio.class);
 
         dao.updateBeneficios(from, to);
 
@@ -58,8 +61,8 @@ class BeneficioDAOTest {
 
     @Test
     void shouldNotUpdateBeneficiosWhenFail() {
-        var from = new Beneficio(1L, "Beneficio A", "Descrição A", new BigDecimal("1000.00"), true);
-        var to = new Beneficio(2L, "Beneficio B", "Descrição B", new BigDecimal("500.00"), true);
+        var from = MockUtils.fromFile("beneficio-valid-01.json", Beneficio.class);
+        var to = MockUtils.fromFile("beneficio-valid-02.json", Beneficio.class);
 
         doThrow(new PersistenceException()).when(em).merge(any());
 

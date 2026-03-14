@@ -1,0 +1,7 @@
+{
+  "id": 2,
+  "nome": "Beneficio B",
+  "descricao": "Descrição B",
+  "valor": 500.00,
+  "ativo": true
+}
