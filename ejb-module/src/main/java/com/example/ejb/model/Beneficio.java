@@ -23,7 +23,7 @@ public class Beneficio {
 
     @Column(name = "ATIVO")
     private boolean ativo = true;
-    
+
     @Version
     @Column(name = "VERSION")
     private Long version = 0L;
@@ -37,6 +37,11 @@ public class Beneficio {
         this.descricao = descricao;
         this.valor = valor;
         this.ativo = ativo;
+    }
+
+    public Beneficio(String nome, BigDecimal valor) {
+        this.nome = nome;
+        this.valor = valor;
     }
 
     public Long getId() {

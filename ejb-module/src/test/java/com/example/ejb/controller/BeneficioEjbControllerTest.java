@@ -1,9 +1,11 @@
 package com.example.ejb.controller;
 
+import com.example.ejb.dto.BeneficioResponseDTO;
 import com.example.ejb.dto.TransferDTO;
 import com.example.ejb.exception.BeneficioException;
 import com.example.ejb.model.Beneficio;
 import com.example.ejb.service.BeneficioEjbService;
+import com.example.ejb.utils.MockUtils;
 import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,14 +31,16 @@ class BeneficioEjbControllerTest {
     public void shouldReturnBeneficioWhenIdExists() {
 
         var id = 1L;
-        var beneficio = new Beneficio(1L, "Beneficio A", "Descrição A", new BigDecimal("1000.00"), true);
+        var beneficio = MockUtils.fromFile("beneficio-valid-01.json", Beneficio.class);
+        var beneficioResponseDTO = MockUtils.fromFile("beneficio-response-dto-valid-01.json", BeneficioResponseDTO.class);
+
         when(service.findById(id)).thenReturn(beneficio);
 
-        Response response = controller.findById(id);
+        var response = controller.findById(id);
 
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
         assertNotNull(response.getEntity());
-        assertEquals("Beneficio A", ((Beneficio) response.getEntity()).getNome());
+        assertEquals(beneficioResponseDTO.nome(), ((BeneficioResponseDTO) response.getEntity()).nome());
     }
 
     @Test

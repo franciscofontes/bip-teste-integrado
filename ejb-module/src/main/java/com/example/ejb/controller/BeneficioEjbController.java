@@ -1,7 +1,7 @@
 package com.example.ejb.controller;
 
 import com.example.ejb.dto.TransferDTO;
-import com.example.ejb.model.Beneficio;
+import com.example.ejb.mapper.BeneficioResponseMapper;
 import com.example.ejb.service.BeneficioEjbService;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
@@ -33,7 +33,8 @@ public class BeneficioEjbController {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findById(@PathParam("id") Long id) {
-        Beneficio beneficio = service.findById(id);
-        return Response.ok(beneficio).build();
+        var beneficio = service.findById(id);
+        var beneficioDTO = new BeneficioResponseMapper().toDTO(beneficio);
+        return Response.ok(beneficioDTO).build();
     }
 }
