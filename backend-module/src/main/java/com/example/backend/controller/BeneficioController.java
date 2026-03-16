@@ -3,6 +3,7 @@ package com.example.backend.controller;
 import com.example.backend.dto.BeneficioRequestDTO;
 import com.example.backend.dto.BeneficioResponseDTO;
 import com.example.backend.service.BeneficioService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -31,12 +32,12 @@ public class BeneficioController {
     }
 
     @PostMapping
-    public void create(@RequestBody BeneficioRequestDTO dto) {
+    public void create(@RequestBody @Valid BeneficioRequestDTO dto) {
         service.create(dto);
     }
 
     @PutMapping("/{id}")
-    public BeneficioResponseDTO update(@PathVariable Long id, @RequestBody BeneficioRequestDTO dto) {
+    public BeneficioResponseDTO update(@PathVariable Long id, @RequestBody @Valid BeneficioRequestDTO dto) {
         return service.update(id, dto);
     }
 
