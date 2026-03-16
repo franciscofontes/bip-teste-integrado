@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -26,6 +27,25 @@ class BeneficioEjbControllerTest {
 
     @InjectMocks
     private BeneficioEjbController controller;
+
+    @Test
+    void shouldReturnBeneficiosWhenFindAll() {
+
+        var beneficios = List.of(MockUtils.fromFile("beneficio-valid-01.json", Beneficio.class));
+
+        when(service.findAll()).thenReturn(beneficios);
+
+        var result = controller.findAll();
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void shouldNotFindAllWhenFail() {
+        when(service.findAll()).thenThrow(BeneficioException.class);
+
+        assertThrows(BeneficioException.class, () -> controller.findAll());
+    }
 
     @Test
     public void shouldReturnBeneficioWhenIdExists() {

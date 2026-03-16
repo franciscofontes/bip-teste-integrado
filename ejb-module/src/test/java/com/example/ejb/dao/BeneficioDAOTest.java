@@ -5,14 +5,18 @@ import com.example.ejb.model.Beneficio;
 import com.example.ejb.utils.MockUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;
+import jakarta.persistence.TypedQuery;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -21,8 +25,29 @@ class BeneficioDAOTest {
     @Mock
     private EntityManager em;
 
+    @Mock
+    TypedQuery<Beneficio> query;
+
     @InjectMocks
     private BeneficioDAO dao;
+
+    @Test
+    void shouldReturnBeneficiosWhenFindAll() {
+
+        when(em.createQuery(anyString(), eq(Beneficio.class))).thenReturn(query);
+        when(query.getResultList()).thenReturn(List.of(new Beneficio()));
+
+        var result = dao.findAll();
+
+        assertNotNull(result);
+    }
+
+    @Test
+    void shouldNotFindAllWhenFail() {
+        doThrow(new PersistenceException()).when(em).createQuery(anyString(), eq(Beneficio.class));
+
+        assertThrows(BeneficioException.class, () -> dao.findAll());
+    }
 
     @Test
     void shouldReturnBeneficioWhenIdExists() {
@@ -46,6 +71,15 @@ class BeneficioDAOTest {
         var beneficioOptional = dao.findById(id);
 
         assertTrue(beneficioOptional.isEmpty());
+    }
+
+    @Test
+    void shouldNotReturnWhenIdNotExists() {
+        var id = 3L;
+
+        doThrow(new PersistenceException()).when(em).find(Beneficio.class, id);
+
+        assertThrows(BeneficioException.class, () -> dao.findById(id));
     }
 
     @Test

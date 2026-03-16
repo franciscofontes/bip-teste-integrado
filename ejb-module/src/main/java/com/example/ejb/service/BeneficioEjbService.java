@@ -8,12 +8,21 @@ import jakarta.ejb.Stateless;
 import jakarta.transaction.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Stateless
 public class BeneficioEjbService {
 
     @EJB
     private BeneficioDAO dao;
+
+    public List<Beneficio> findAll() {
+        return dao.findAll();
+    }
+
+    public Beneficio findById(Long id) {
+        return dao.findById(id).orElseThrow(() -> new BeneficioException(404, "Beneficio não cadastrado"));
+    }
 
     @Transactional
     public void transfer(Long fromId, Long toId, BigDecimal amount) {
@@ -29,9 +38,5 @@ public class BeneficioEjbService {
         to.setValor(to.getValor().add(amount));
 
         dao.updateBeneficios(from, to);
-    }
-
-    public Beneficio findById(Long id) {
-        return dao.findById(id).orElseThrow(() -> new BeneficioException(404, "Beneficio não cadastrado"));
     }
 }

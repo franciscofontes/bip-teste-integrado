@@ -1,5 +1,6 @@
 package com.example.ejb.controller;
 
+import com.example.ejb.dto.BeneficioResponseDTO;
 import com.example.ejb.dto.TransferDTO;
 import com.example.ejb.mapper.BeneficioResponseMapper;
 import com.example.ejb.service.BeneficioEjbService;
@@ -20,13 +21,11 @@ public class BeneficioEjbController {
     public BeneficioEjbController() {
     }
 
-    @POST
-    @Path("/transfer")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response transfer(@Valid TransferDTO dto) {
-        service.transfer(dto.fromId(), dto.toId(), dto.amount());
-        return Response.ok("Transferencia efetuada!").build();
+    public Response findAll() {
+        var beneficiosResponseDTO = service.findAll().stream().map(beneficio -> new BeneficioResponseDTO(beneficio.getNome(), beneficio.getValor())).toList();
+        return Response.ok(beneficiosResponseDTO).build();
     }
 
     @GET
@@ -34,7 +33,16 @@ public class BeneficioEjbController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response findById(@PathParam("id") Long id) {
         var beneficio = service.findById(id);
-        var beneficioDTO = new BeneficioResponseMapper().toDTO(beneficio);
-        return Response.ok(beneficioDTO).build();
+        var beneficioResponseDTO = new BeneficioResponseMapper().toDTO(beneficio);
+        return Response.ok(beneficioResponseDTO).build();
+    }
+
+    @POST
+    @Path("/transfer")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response transfer(@Valid TransferDTO dto) {
+        service.transfer(dto.fromId(), dto.toId(), dto.amount());
+        return Response.ok("Transferencia efetuada!").build();
     }
 }
