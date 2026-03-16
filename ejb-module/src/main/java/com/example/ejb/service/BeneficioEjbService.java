@@ -24,6 +24,23 @@ public class BeneficioEjbService {
         return dao.findById(id).orElseThrow(() -> new BeneficioException(404, "Beneficio não cadastrado"));
     }
 
+    public void create(Beneficio beneficio) {
+        dao.create(beneficio);
+    }
+
+    public void update(Long id, Beneficio beneficio) {
+        var beneficioMerged = findById(id);
+        beneficioMerged.setNome(beneficio.getNome());
+        beneficioMerged.setDescricao(beneficio.getDescricao());
+        beneficioMerged.setAtivo(beneficio.isAtivo());
+        beneficioMerged.setValor(beneficio.getValor());
+        dao.update(beneficio);
+    }
+
+    public void delete(Long id) {
+        dao.delete(findById(id));
+    }
+
     @Transactional
     public void transfer(Long fromId, Long toId, BigDecimal amount) {
 

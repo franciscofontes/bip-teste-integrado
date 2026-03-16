@@ -2,5 +2,5 @@ package com.example.ejb.dto;
 
 import java.math.BigDecimal;
 
-public record BeneficioResponseDTO(String nome, BigDecimal valor) {
+public record BeneficioResponseDTO(Long id, String nome, BigDecimal valor, Long version) {
 }

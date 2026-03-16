@@ -1,7 +1,9 @@
 package com.example.ejb.controller;
 
+import com.example.ejb.dto.BeneficioRequestDTO;
 import com.example.ejb.dto.BeneficioResponseDTO;
 import com.example.ejb.dto.TransferDTO;
+import com.example.ejb.mapper.BeneficioRequestMapper;
 import com.example.ejb.mapper.BeneficioResponseMapper;
 import com.example.ejb.service.BeneficioEjbService;
 import jakarta.ejb.EJB;
@@ -24,7 +26,7 @@ public class BeneficioEjbController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response findAll() {
-        var beneficiosResponseDTO = service.findAll().stream().map(beneficio -> new BeneficioResponseDTO(beneficio.getNome(), beneficio.getValor())).toList();
+        var beneficiosResponseDTO = service.findAll().stream().map(beneficio -> new BeneficioResponseDTO(beneficio.getId(), beneficio.getNome(), beneficio.getValor(), beneficio.getVersion())).toList();
         return Response.ok(beneficiosResponseDTO).build();
     }
 
@@ -35,6 +37,30 @@ public class BeneficioEjbController {
         var beneficio = service.findById(id);
         var beneficioResponseDTO = new BeneficioResponseMapper().toDTO(beneficio);
         return Response.ok(beneficioResponseDTO).build();
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response create(BeneficioRequestDTO dto) {
+        service.create(new BeneficioRequestMapper().toEntity(dto));
+        return Response.status(Response.Status.CREATED).build();
+    }
+
+    @PUT
+    @Path("{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response update(@PathParam("id") Long id, BeneficioRequestDTO dto) {
+        service.update(id, new BeneficioRequestMapper().toEntity(dto));
+        return Response.noContent().build();
+    }
+
+    @DELETE
+    @Path("{id}")
+    public Response delete(@PathParam("id") Long id) {
+        service.delete(id);
+        return Response.noContent().build();
     }
 
     @POST

@@ -12,6 +12,6 @@ public class BeneficioResponseMapper implements Mapper<Beneficio, BeneficioRespo
 
     @Override
     public BeneficioResponseDTO toDTO(Beneficio beneficio) {
-        return new BeneficioResponseDTO(beneficio.getNome(), beneficio.getValor());
+        return new BeneficioResponseDTO(beneficio.getId(), beneficio.getNome(), beneficio.getValor(), beneficio.getVersion());
     }
 }

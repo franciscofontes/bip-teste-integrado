@@ -1,6 +1,7 @@
 package com.example.backend.service;
 
 import com.example.backend.client.BeneficioClient;
+import com.example.backend.dto.BeneficioRequestDTO;
 import com.example.backend.dto.BeneficioResponseDTO;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +17,22 @@ public class BeneficioService {
     }
 
     public List<BeneficioResponseDTO> findAll() {
-        try {
-            return client.findAll();
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao integrar com API de beneficios");
-        }
+        return client.findAll();
+    }
+
+    public BeneficioResponseDTO findById(Long id) {
+        return client.findById(id);
+    }
+
+    public void create(BeneficioRequestDTO dto) {
+        client.create(dto);
+    }
+
+    public BeneficioResponseDTO update(Long id, BeneficioRequestDTO dto) {
+        return client.update(id, dto);
+    }
+
+    public void delete(Long id) {
+        client.delete(id);
     }
 }

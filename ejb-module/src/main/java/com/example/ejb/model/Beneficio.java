@@ -39,6 +39,16 @@ public class Beneficio {
         this.ativo = ativo;
     }
 
+    public Beneficio(Long id) {
+        this.id = id;
+    }
+
+    public Beneficio(String nome, String descricao, BigDecimal valor) {
+        this.nome = nome;
+        this.descricao = descricao;
+        this.valor = valor;
+    }
+
     public Beneficio(String nome, BigDecimal valor) {
         this.nome = nome;
         this.valor = valor;

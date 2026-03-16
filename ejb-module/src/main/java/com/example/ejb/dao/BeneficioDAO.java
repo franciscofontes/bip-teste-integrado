@@ -6,6 +6,7 @@ import jakarta.ejb.Stateless;
 import jakarta.ejb.TransactionAttribute;
 import jakarta.ejb.TransactionAttributeType;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.OptimisticLockException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.PersistenceException;
 
@@ -33,6 +34,35 @@ public class BeneficioDAO extends GenericDAO<Beneficio> {
             return Optional.ofNullable(em.find(Beneficio.class, id));
         } catch (PersistenceException e) {
             throw new BeneficioException(500, "Erro ao tentar buscar beneficio");
+        }
+    }
+
+    @Override
+    public void create(Beneficio beneficio) {
+        try {
+            em.persist(beneficio);
+        } catch (PersistenceException e) {
+            throw new BeneficioException(500, "Erro ao tentar criar beneficio");
+        }
+    }
+
+    @Override
+    public void update(Beneficio beneficio) {
+        try {
+            em.merge(beneficio);
+        } catch(OptimisticLockException e) {
+            throw new BeneficioException(500, "Este registro esta sendo editado por outra pessoa");
+        } catch (PersistenceException e) {
+            throw new BeneficioException(500, "Erro ao tentar atualizar beneficio");
+        }
+    }
+
+    @Override
+    public void delete(Beneficio beneficio) {
+        try {
+            em.remove(beneficio);
+        } catch (PersistenceException e) {
+            throw new BeneficioException(500, "Erro ao tentar deletar beneficio");
         }
     }
 
