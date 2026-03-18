@@ -5,6 +5,7 @@ import com.example.ejb.dto.TransferDTO;
 import com.example.ejb.exception.BeneficioException;
 import com.example.ejb.model.Beneficio;
 import com.example.ejb.service.BeneficioEjbService;
+import com.example.ejb.utils.MessageUtils;
 import com.example.ejb.utils.MockUtils;
 import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.Test;
@@ -89,13 +90,30 @@ class BeneficioEjbControllerTest {
     }
 
     @Test
-    public void shouldReturn422WhenInsufficientFunds() {
+    public void shouldReturn422WhenTransferWithSameIds() {
+
+        var fromId = 1L;
+        var toId = 1L;
+        var amount = new BigDecimal("2000.00");
+        var transferDTO = new TransferDTO(fromId, toId, amount);
+        var msg = MessageUtils.TRANSFER_SAME_IDS;
+
+        when(controller.transfer(transferDTO)).thenThrow(new BeneficioException(422, msg));
+
+        BeneficioException exception = assertThrows(BeneficioException.class, () -> controller.transfer(transferDTO));
+
+        assertEquals(422, exception.getStatus());
+        assertEquals(msg, exception.getMessage());
+    }
+
+    @Test
+    public void shouldReturn422WhenTransferWithInsufficientFunds() {
 
         var fromId = 1L;
         var toId = 2L;
         var amount = new BigDecimal("2000.00");
         var transferDTO = new TransferDTO(fromId, toId, amount);
-        var msg = "Saldo insuficiente";
+        var msg = MessageUtils.TRANSFER_INSUFFICIENT_FUNDS;
 
         when(controller.transfer(transferDTO)).thenThrow(new BeneficioException(422, msg));
 

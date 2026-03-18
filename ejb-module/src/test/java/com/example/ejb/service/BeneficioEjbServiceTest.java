@@ -3,6 +3,7 @@ package com.example.ejb.service;
 import com.example.ejb.dao.BeneficioDAO;
 import com.example.ejb.exception.BeneficioException;
 import com.example.ejb.model.Beneficio;
+import com.example.ejb.utils.MessageUtils;
 import com.example.ejb.utils.MockUtils;
 import jakarta.persistence.PersistenceException;
 import org.junit.jupiter.api.Test;
@@ -84,7 +85,18 @@ class BeneficioEjbServiceTest {
     }
 
     @Test
-    void shouldNotTransferBeneficiosWhenInsufficientFunds() {
+    void shouldThrowExceptionWhenTransferBeneficiosWhenSameIds() {
+        var fromId = 1L;
+        var toId = 1L;
+        var amount = new BigDecimal("500.00");
+
+        var exception = assertThrows(BeneficioException.class, () -> service.transfer(fromId, toId, amount));
+
+        assertEquals(MessageUtils.TRANSFER_SAME_IDS, exception.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenTransferBeneficiosWhenInsufficientFunds() {
         var from = MockUtils.fromFile("beneficio-insufficient-funds.json", Beneficio.class);
         var to = MockUtils.fromFile("beneficio-valid-02.json", Beneficio.class);
         var fromId = 1L;
@@ -94,6 +106,8 @@ class BeneficioEjbServiceTest {
         when(dao.findById(fromId)).thenReturn(Optional.of(from));
         when(dao.findById(toId)).thenReturn(Optional.of(to));
 
-        assertThrows(BeneficioException.class, () -> service.transfer(fromId, toId, amount));
+        var exception = assertThrows(BeneficioException.class, () -> service.transfer(fromId, toId, amount));
+
+        assertEquals(MessageUtils.TRANSFER_INSUFFICIENT_FUNDS, exception.getMessage());
     }
 }

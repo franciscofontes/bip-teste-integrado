@@ -3,6 +3,8 @@ package com.example.ejb.service;
 import com.example.ejb.dao.BeneficioDAO;
 import com.example.ejb.exception.BeneficioException;
 import com.example.ejb.model.Beneficio;
+import com.example.ejb.utils.MessageUtils;
+import com.example.ejb.validation.TransferValidation;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 import jakarta.transaction.Transactional;
@@ -21,7 +23,7 @@ public class BeneficioEjbService {
     }
 
     public Beneficio findById(Long id) {
-        return dao.findById(id).orElseThrow(() -> new BeneficioException(404, "Beneficio não cadastrado"));
+        return dao.findById(id).orElseThrow(() -> new BeneficioException(404, MessageUtils.BENEFICIO_NOT_RECORD));
     }
 
     public void create(Beneficio beneficio) {
@@ -44,12 +46,13 @@ public class BeneficioEjbService {
     @Transactional
     public void transfer(Long fromId, Long toId, BigDecimal amount) {
 
+        var transferValidation = new TransferValidation();
+        transferValidation.verifySameId(fromId, toId);
+
         var from = findById(fromId);
         var to = findById(toId);
 
-        if (amount.compareTo(from.getValor()) > 0) {
-            throw new BeneficioException(422, "Saldo insuficiente");
-        }
+        transferValidation.verifyInsufficientFunds(from.getValor(), amount);
 
         from.setValor(from.getValor().subtract(amount));
         to.setValor(to.getValor().add(amount));

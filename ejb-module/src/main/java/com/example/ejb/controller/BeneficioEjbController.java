@@ -6,6 +6,7 @@ import com.example.ejb.dto.TransferDTO;
 import com.example.ejb.mapper.BeneficioRequestMapper;
 import com.example.ejb.mapper.BeneficioResponseMapper;
 import com.example.ejb.service.BeneficioEjbService;
+import com.example.ejb.utils.MessageUtils;
 import com.example.ejb.validation.TransferValidation;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
@@ -69,9 +70,7 @@ public class BeneficioEjbController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response transfer(@Valid TransferDTO dto) {
-        var transferValidation = new TransferValidation();
-        transferValidation.verify(dto.fromId(), dto.toId());
         service.transfer(dto.fromId(), dto.toId(), dto.amount());
-        return Response.ok("Transferencia efetuada!").build();
+        return Response.ok(MessageUtils.TRANSFER_SUCCESS).build();
     }
 }
