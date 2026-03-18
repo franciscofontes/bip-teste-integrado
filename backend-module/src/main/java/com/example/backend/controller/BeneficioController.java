@@ -2,7 +2,12 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.BeneficioRequestDTO;
 import com.example.backend.dto.BeneficioResponseDTO;
+import com.example.backend.dto.TransferDTO;
 import com.example.backend.service.BeneficioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/beneficios")
+@Tag(name = "Beneficios", description = "Gerenciamento de beneficios")
 public class BeneficioController {
 
     private final BeneficioService service;
@@ -21,28 +27,39 @@ public class BeneficioController {
         this.service = service;
     }
 
+    @Operation(summary = "Listar todos os beneficios", description = "Retorna uma lista de beneficios cadastrados")
     @GetMapping
     public List<BeneficioResponseDTO> findAll() {
         return service.findAll();
     }
 
+    @Operation(summary = "Listar beneficio pelo identificador", description = "Retorna beneficio cadastrado")
     @GetMapping("/{id}")
     public BeneficioResponseDTO findById(@PathVariable Long id) {
         return service.findById(id);
     }
 
+    @Operation(summary = "Criar beneficio", description = "Cria um novo beneficio")
     @PostMapping
     public void create(@RequestBody @Valid BeneficioRequestDTO dto) {
         service.create(dto);
     }
 
+    @Operation(summary = "Atualizar beneficio", description = "Atualiza um beneficio")
     @PutMapping("/{id}")
     public BeneficioResponseDTO update(@PathVariable Long id, @RequestBody @Valid BeneficioRequestDTO dto) {
         return service.update(id, dto);
     }
 
+    @Operation(summary = "Deletar beneficio", description = "Remove um beneficio")
     @DeleteMapping("/{id}")
-    public void deletar(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         service.delete(id);
+    }
+
+    @Operation(summary = "Transferência de beneficio", description = "Transfere uma certa quantidade de um beneficio para outro")
+    @PostMapping("/transfer")
+    public void transfer(@RequestBody @Valid TransferDTO dto) {
+        service.transfer(dto);
     }
 }

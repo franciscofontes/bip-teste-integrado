@@ -3,6 +3,7 @@ package com.example.backend.service;
 import com.example.backend.client.BeneficioClient;
 import com.example.backend.dto.BeneficioRequestDTO;
 import com.example.backend.dto.BeneficioResponseDTO;
+import com.example.backend.dto.TransferDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,5 +35,9 @@ public class BeneficioService {
 
     public void delete(Long id) {
         client.delete(id);
+    }
+
+    public void transfer(TransferDTO dto) {
+       client.transfer(dto);
     }
 }

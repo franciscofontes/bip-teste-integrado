@@ -2,6 +2,7 @@ package com.example.backend.client;
 
 import com.example.backend.dto.BeneficioRequestDTO;
 import com.example.backend.dto.BeneficioResponseDTO;
+import com.example.backend.dto.TransferDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,4 +25,7 @@ public interface BeneficioClient {
 
     @DeleteMapping("{id}")
     void delete(@PathVariable("id") Long id);
+
+    @PostMapping("/transfer")
+    void transfer(@RequestBody TransferDTO dto);
 }

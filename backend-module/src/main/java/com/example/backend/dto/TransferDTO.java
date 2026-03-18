@@ -1,4 +1,4 @@
-package com.example.ejb.dto;
+package com.example.backend.dto;
 
 import jakarta.validation.constraints.Positive;
 
