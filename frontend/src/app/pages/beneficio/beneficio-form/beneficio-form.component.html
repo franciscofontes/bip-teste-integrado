@@ -1,0 +1,11 @@
+<app-header/>
+
+<h2>{{ isEdit ? 'Editar' : 'Novo' }} Beneficio</h2>
+<form [formGroup]="form" (ngSubmit)="save()">
+  <input type="text" formControlName="nome" placeholder="Nome">
+  <input type="text" formControlName="descricao" placeholder="Descrição">
+  <input type="number" formControlName="valor" placeholder="Preço">
+  <input type="checkbox" formControlName="ativo" placeholder="Ativo">
+  <button type="submit" [disabled]="form.invalid">Salvar</button>
+  <a routerLink="/beneficios">Cancelar</a>
+</form>

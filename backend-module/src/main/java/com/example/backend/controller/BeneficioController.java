@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -31,6 +33,16 @@ public class BeneficioController {
     @GetMapping
     public List<BeneficioResponseDTO> findAll() {
         return service.findAll();
+    }
+
+    @GetMapping("/page")
+    public ResponseEntity<Page<BeneficioResponseDTO>> findByPage(
+            @RequestParam(value = "number", defaultValue = "0") Integer number,
+            @RequestParam(value = "size", defaultValue = "12") Integer size,
+            @RequestParam(value = "orderBy", defaultValue = "id") String orderBy,
+            @RequestParam(value = "direction", defaultValue = "DESC") String direction) {
+        Page<BeneficioResponseDTO> pageBeneficios = service.findByPage(number, size, orderBy, direction);
+        return ResponseEntity.ok().body(pageBeneficios);
     }
 
     @Operation(summary = "Listar beneficio pelo identificador", description = "Retorna beneficio cadastrado")

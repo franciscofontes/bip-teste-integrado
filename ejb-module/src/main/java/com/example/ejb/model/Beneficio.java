@@ -31,27 +31,18 @@ public class Beneficio {
     public Beneficio() {
     }
 
-    public Beneficio(Long id, String nome, String descricao, BigDecimal valor, boolean ativo) {
-        this.id = id;
+    public Beneficio(String nome, String descricao, BigDecimal valor, boolean ativo) {        
         this.nome = nome;
         this.descricao = descricao;
         this.valor = valor;
         this.ativo = ativo;
     }
 
-    public Beneficio(Long id) {
+    public Beneficio(Long id, String nome, BigDecimal valor, boolean ativo) {
         this.id = id;
-    }
-
-    public Beneficio(String nome, String descricao, BigDecimal valor) {
-        this.nome = nome;
-        this.descricao = descricao;
-        this.valor = valor;
-    }
-
-    public Beneficio(String nome, BigDecimal valor) {
         this.nome = nome;
         this.valor = valor;
+        this.ativo = ativo;
     }
 
     public Long getId() {
@@ -100,5 +91,17 @@ public class Beneficio {
 
     public void setVersion(Long version) {
         this.version = version;
+    }
+
+    @Override
+    public String toString() {
+        return "Beneficio{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", descricao='" + descricao + '\'' +
+                ", valor=" + valor +
+                ", ativo=" + ativo +
+                ", version=" + version +
+                '}';
     }
 }

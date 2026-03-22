@@ -14,5 +14,7 @@ public record BeneficioRequestDTO(
         String descricao,
 
         @PositiveOrZero(message = "Valor deve ser zero ou maior")
-        BigDecimal valor) {
+        BigDecimal valor,
+
+        boolean ativo) {
 }

@@ -4,6 +4,7 @@ import com.example.backend.dto.BeneficioRequestDTO;
 import com.example.backend.dto.BeneficioResponseDTO;
 import com.example.backend.dto.TransferDTO;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +14,13 @@ public interface BeneficioClient {
 
     @GetMapping()
     List<BeneficioResponseDTO> findAll();
+
+    @GetMapping("/page")
+    Page<BeneficioResponseDTO> findByPage(
+            @RequestParam(value = "number", defaultValue = "0") Integer number,
+            @RequestParam(value = "size", defaultValue = "12") Integer size,
+            @RequestParam(value = "orderBy", defaultValue = "id") String orderBy,
+            @RequestParam(value = "direction", defaultValue = "DESC") String direction);
 
     @GetMapping("{id}")
     BeneficioResponseDTO findById(@PathVariable("id") Long id);

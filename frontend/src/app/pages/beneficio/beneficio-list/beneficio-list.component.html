@@ -1,0 +1,30 @@
+<app-header />
+
+<h2>Lista de Beneficios</h2>
+<a routerLink="novo" class="btn btn-primary">Adicionar</a>
+<table>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Nome</th>
+    <th>Valor</th>
+    <th>Ativo</th>
+    <th>Ações</th>
+  </tr>
+  </thead>
+  <tbody>
+    @for (beneficio of pageBeneficios().content; track beneficio.id) {
+      <tr>
+        <td>{{ beneficio.id }}</td>
+        <td>{{ beneficio.nome }}</td>
+        <td>{{ beneficio.valor | currency:'BRL' }}</td>
+        <td>{{ beneficio.ativo ? 'Sim' : 'Não' }}</td>
+        <td>
+          <a [routerLink]="['editar', beneficio.id]">Editar</a>
+          <button (click)="delete(beneficio.id)">Excluir</button>
+        </td>
+      </tr>
+    } @empty {
+    }
+  </tbody>
+</table>

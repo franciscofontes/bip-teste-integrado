@@ -1,4 +1,5 @@
 {
   "nome": "Beneficio A",
-  "valor": 1000.00
+  "valor": 1000.00,
+  "ativo": true
 }

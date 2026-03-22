@@ -2,13 +2,11 @@ package com.example.ejb.dao;
 
 import com.example.ejb.exception.BeneficioException;
 import com.example.ejb.model.Beneficio;
+import com.example.ejb.model.Page;
 import jakarta.ejb.Stateless;
 import jakarta.ejb.TransactionAttribute;
 import jakarta.ejb.TransactionAttributeType;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.OptimisticLockException;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.PersistenceException;
+import jakarta.persistence.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +24,24 @@ public class BeneficioDAO extends GenericDAO<Beneficio> {
         } catch (PersistenceException e) {
             throw new BeneficioException(500, "Erro ao tentar buscar beneficios");
         }
+    }
+
+    @Override
+    public Page<Beneficio> findByPage(Integer number, Integer size, String orderBy, String direction) {
+        var query = em.createQuery("SELECT e FROM " + Beneficio.class.getSimpleName() + " e ORDER BY " + orderBy + " " + direction);
+        query.setFirstResult((number) * size);
+        query.setMaxResults(size);
+        var beneficios = query.getResultList();
+
+        var queryCount = em.createQuery("SELECT COUNT(id) FROM " + Beneficio.class.getSimpleName());
+        var countResult = (long) queryCount.getSingleResult();
+
+        var totalElements = Long.valueOf(countResult).intValue();
+        var totalPages = totalElements / size;
+        var first = number == 0;
+        var last = number == totalPages;
+
+        return new Page<Beneficio>(beneficios, number, first, last, size, totalPages, totalElements);
     }
 
     @Override

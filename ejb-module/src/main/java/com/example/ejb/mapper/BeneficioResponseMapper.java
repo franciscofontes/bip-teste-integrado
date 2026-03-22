@@ -7,11 +7,11 @@ public class BeneficioResponseMapper implements Mapper<Beneficio, BeneficioRespo
 
     @Override
     public Beneficio toEntity(BeneficioResponseDTO beneficioResponseDTO) {
-        return new Beneficio(beneficioResponseDTO.nome(), beneficioResponseDTO.valor());
+        return new Beneficio(beneficioResponseDTO.id(), beneficioResponseDTO.nome(), beneficioResponseDTO.valor(), beneficioResponseDTO.ativo());
     }
 
     @Override
     public BeneficioResponseDTO toDTO(Beneficio beneficio) {
-        return new BeneficioResponseDTO(beneficio.getId(), beneficio.getNome(), beneficio.getValor(), beneficio.getVersion());
+        return new BeneficioResponseDTO(beneficio.getId(), beneficio.getNome(), beneficio.getValor(), beneficio.isAtivo());
     }
 }

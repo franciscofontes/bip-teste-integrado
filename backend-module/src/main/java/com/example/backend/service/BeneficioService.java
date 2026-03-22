@@ -4,6 +4,7 @@ import com.example.backend.client.BeneficioClient;
 import com.example.backend.dto.BeneficioRequestDTO;
 import com.example.backend.dto.BeneficioResponseDTO;
 import com.example.backend.dto.TransferDTO;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +20,10 @@ public class BeneficioService {
 
     public List<BeneficioResponseDTO> findAll() {
         return client.findAll();
+    }
+
+    public Page<BeneficioResponseDTO> findByPage(Integer number, Integer size, String orderBy, String direction) {
+        return client.findByPage(number, size, orderBy, direction);
     }
 
     public BeneficioResponseDTO findById(Long id) {
@@ -38,6 +43,6 @@ public class BeneficioService {
     }
 
     public void transfer(TransferDTO dto) {
-       client.transfer(dto);
+        client.transfer(dto);
     }
 }
