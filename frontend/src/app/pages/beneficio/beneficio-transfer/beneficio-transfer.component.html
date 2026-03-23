@@ -1,0 +1,65 @@
+<section class="section">
+
+  <h1 class="title">Beneficios</h1>
+  <h2 class="subtitle">Transfência de beneficio</h2>
+
+  <form [formGroup]="form" (ngSubmit)="save()">
+
+    <div class="field">
+      <label class="label">Beneficio de origem</label>
+      <div class="control">
+        <input disabled class="input" type="text" value="{{ fromId + ' - ' + fromNome }}"
+               placeholder="Origem">
+      </div>
+      <p class="help"></p>
+    </div>
+
+    <div class="field">
+      <label class="label">Quantidade para transferência</label>
+      <div class="control">
+        <input class="input" type="number" formControlName="amount" placeholder="Quantidade">
+      </div>
+      @if (form.get('amount')?.invalid && form.get('amount')?.touched) {
+        @if (form.get('amount')?.hasError('required')) {
+          <p class="help is-danger"> Quantidade é obrigatório </p>
+        }
+        @if (form.get('amount')?.hasError('min')) {
+          <p class="help is-danger"> Quantidade deve ser maior ou igual a 1</p>
+        }
+      }
+    </div>
+
+    <div class="field">
+      <label class="label">Beneficio de destino</label>
+      <div class="control">
+        <div class="select is-fullwidth">
+          <select (change)="select($event)">
+            <option value="" disabled selected>Select an option</option>
+            @for (beneficio of beneficios; track beneficio.id) {
+              <option value="{{beneficio.id}}">
+                {{ beneficio.id + ' - ' + beneficio.nome }}
+              </option>
+            }
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button type="submit" [disabled]="form.invalid" class="button is-success">
+        <span class="icon is-small">
+          <i class="material-icons">check</i>
+        </span>
+        <span>Salvar</span>
+      </button>
+      <a routerLink="/beneficios" class="button">
+        <span class="icon is-small">
+          <i class="material-icons">close</i>
+        </span>
+        <span>Cancelar</span>
+      </a>
+    </div>
+
+  </form>
+
+</section>

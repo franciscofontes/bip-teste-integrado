@@ -1,0 +1,21 @@
+@for (alert of alerts; track alert.id) {
+  <div class="{{cssClass(alert)}}">
+    @if(alert.deleteButton) {
+      <button class="delete" (click)="removeAlert(alert)"></button>
+    }
+    <span class="icon-text">
+        <span class="material-icons">{{alert.icon}}</span>
+        <span [innerHTML]="alert.message"></span>
+    </span>
+    @if (alert && alert.details && alert.details.length > 0) {
+      <div class="content">
+        <ol type="1">
+          @for (detail of alert.details; track detail.id) {
+            <li>{{detail}}</li>
+          }
+        </ol>
+      </div>
+    }
+  </div>
+}
+

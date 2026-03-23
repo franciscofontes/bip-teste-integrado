@@ -3,26 +3,23 @@ import {Beneficio} from '../models/beneficio.model';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Page} from '../models/page.model';
 import {PageRequest} from '../models/page-request.model';
+import {Transfer} from '../models/transfer.model';
 
 @Injectable({providedIn: 'root'})
 export class BeneficioService {
 
   private http = inject(HttpClient);
   private apiUrl = 'http://localhost:8080/api/v1/beneficios';
-  private pageRequest: PageRequest | undefined;
-
-  pageBeneficios = signal<Page<Beneficio>>(
-    {
-      number: 0, content: [], first: false, last: false, size: 0, totalElements: 0, totalPages: 0
-    }
-  );
+  pageRequest: PageRequest | undefined;
+  pageBeneficios = signal<Page<Beneficio>>({number: 0, content: [], first: false, last: false, size: 0, totalElements: 0, totalPages: 0});
   beneficios = signal<Beneficio[]>([]);
+  beneficio = signal<Beneficio>({id: 0, nome: '', descricao: '', valor: 0, ativo: true});
 
   constructor() {
   }
 
   findAll() {
-    this.http.get<Beneficio[]>(this.apiUrl).subscribe(data => {
+    return this.http.get<Beneficio[]>(this.apiUrl).subscribe(data => {
       this.beneficios.set(data);
     });
   }
@@ -35,22 +32,26 @@ export class BeneficioService {
     });
   }
 
-  add(beneficio: Beneficio) {
-    this.http.post<Beneficio>(this.apiUrl, beneficio).subscribe(() => {
-      this.findByPage(this.pageRequest);
+  findById(id: number) {
+    this.http.get<Beneficio>(this.apiUrl + "/" + id).subscribe(data => {
+      this.beneficio.set(data);
     });
+  }
+
+  create(beneficio: Beneficio) {
+    return this.http.post<Beneficio>(this.apiUrl, beneficio);
   }
 
   update(beneficio: Beneficio) {
-    this.http.put(this.apiUrl + '/' + beneficio.id, beneficio).subscribe(() => {
-      this.findByPage(this.pageRequest);
-    });
+    return this.http.put(this.apiUrl + '/' + beneficio.id, beneficio);
   }
 
   delete(id: number) {
-    this.http.delete(this.apiUrl + '/' + id).subscribe(() => {
-      this.findByPage(this.pageRequest);
-    });
+    return this.http.delete(this.apiUrl + '/' + id);
+  }
+
+  transfer(transfer: Transfer) {
+    return this.http.post<Beneficio>(this.apiUrl + '/transfer', transfer);
   }
 
   private fillPageParams(pageRequest?: PageRequest): HttpParams {

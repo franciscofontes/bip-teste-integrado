@@ -1,11 +1,79 @@
-<app-header/>
+<section class="section">
 
-<h2>{{ isEdit ? 'Editar' : 'Novo' }} Beneficio</h2>
-<form [formGroup]="form" (ngSubmit)="save()">
-  <input type="text" formControlName="nome" placeholder="Nome">
-  <input type="text" formControlName="descricao" placeholder="Descrição">
-  <input type="number" formControlName="valor" placeholder="Preço">
-  <input type="checkbox" formControlName="ativo" placeholder="Ativo">
-  <button type="submit" [disabled]="form.invalid">Salvar</button>
-  <a routerLink="/beneficios">Cancelar</a>
-</form>
+  <h1 class="title">Beneficios</h1>
+  <h2 class="subtitle">{{ isEdit ? 'Editar' : 'Novo' }} Beneficio</h2>
+
+  <form [formGroup]="form" (ngSubmit)="save()">
+
+    <div class="field">
+      <label class="label">Nome</label>
+      <div class="control">
+        <input class="input" maxlength="101" type="text" formControlName="nome" placeholder="Nome">
+      </div>
+      @if (form.get('nome')?.invalid && form.get('nome')?.touched) {
+        @if (form.get('nome')?.hasError('required')) {
+          <p class="help is-danger"> Nome é obrigatório </p>
+        }
+        @if (form.get('nome')?.hasError('minlength')) {
+          <p class="help is-danger"> Nome deve ter no mínimo {{ form.get('nome')?.errors?.['minlength'].requiredLength }} caracteres</p>
+        }
+        @if (form.get('nome')?.hasError('maxlength')) {
+          <p class="help is-danger"> Nome deve ter no máximo {{ form.get('nome')?.errors?.['maxlength'].requiredLength }} caracteres</p>
+        }
+      }
+    </div>
+
+    <div class="field">
+      <label class="label">Descrição</label>
+      <div class="control">
+        <textarea class="textarea" type="text" formControlName="descricao" placeholder="Descrição"></textarea>
+      </div>
+      @if (form.get('descricao')?.invalid && form.get('descricao')?.touched) {
+        @if (form.get('descricao')?.hasError('maxlength')) {
+          <p class="help is-danger"> Descrição deve ter no máximo {{ form.get('descricao')?.errors?.['maxlength'].requiredLength }} caracteres</p>
+        }
+      }
+    </div>
+
+    <div class="field">
+      <label class="label">Valor</label>
+      <div class="control">
+        <input class="input" type="number" formControlName="valor" placeholder="Valor">
+      </div>
+      @if (form.get('valor')?.invalid && form.get('valor')?.touched) {
+        @if (form.get('valor')?.hasError('min')) {
+          <p class="help is-danger"> Valor deve ser maior ou igual a zero</p>
+        }
+      }
+    </div>
+
+    <div class="field">
+
+      <div class="control">
+        <label class="label">
+          <input class="checkbox" type="checkbox" formControlName="ativo" placeholder="Ativo">
+          Ativo
+        </label>
+      </div>
+      <p class="help"></p>
+    </div>
+
+    <div class="buttons">
+      <button type="submit" [disabled]="form.invalid" class="button is-success">
+        <span class="icon is-small">
+          <i class="material-icons">check</i>
+        </span>
+        <span>Salvar</span>
+      </button>
+
+      <a routerLink="/beneficios" class="button">
+        <span class="icon is-small">
+          <i class="material-icons">close</i>
+        </span>
+        <span>Cancelar</span>
+      </a>
+    </div>
+
+  </form>
+
+</section>
