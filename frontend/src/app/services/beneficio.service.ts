@@ -4,12 +4,13 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Page} from '../models/page.model';
 import {PageRequest} from '../models/page-request.model';
 import {Transfer} from '../models/transfer.model';
+import {environment} from '../../environments/environment';
 
 @Injectable({providedIn: 'root'})
 export class BeneficioService {
 
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/api/v1/beneficios';
+  private apiUrl = environment.apiUrl;
   pageRequest: PageRequest | undefined;
 
   constructor() {
