@@ -21,7 +21,11 @@ Acredito que com mais tempo poderia fazer mais melhorias, espero que gostem.
 
 Abraço.
 
-Exemplo de novo cadastro:
+------------------------------------------------------------------------------------
+
+**Exemplo de funcionalidades**:
+
+Novo cadastro:
 ![novo.gif](images/novo.gif)
 
 Exemplo de transferência:
