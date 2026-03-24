@@ -2,7 +2,7 @@
 Olá, como vai?
 
 O desafio foi interessante. Eu comecei analisando as tarefas e fiz um esboço da arquitetura que no meu entendimento ficou assim:
-![arquitetura.png](arquitetura.png)
+![arquitetura.png](images/arquitetura.png)
 
 O EJB se comunica com o banco de dados, o microserviço em spring boot faz a intermediação entre o frontend e o EJB, 
 
@@ -20,3 +20,9 @@ No front end usei o angular 20 LTS com a abordagem relativamente nova signals ju
 Acredito que com mais tempo poderia fazer mais melhorias, espero que gostem.  
 
 Abraço.
+
+Exemplo de novo cadastro:
+![novo.gif](images/novo.gif)
+
+Exemplo de transferência:
+![transferencia.gif](images/transferencia.gif)
