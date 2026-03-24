@@ -69,7 +69,7 @@ export class BeneficioTransferComponent {
     this.beneficioService.transfer(transfer).subscribe({
       next: (response) => {
         this.alertService.success("Transferência realizada com sucesso", [], this.successAlertOptions);
-        this.router.navigate(['..'], {relativeTo: this.route}).then(r => '');
+        this.router.navigate(['../..'], {relativeTo: this.route}).then(r => '');
       },
       error: (err) => {
       }
