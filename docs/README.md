@@ -1,43 +1,17 @@
-# 🏗️ Desafio Fullstack Integrado
-🚨 Instrução Importante (LEIA ANTES DE COMEÇAR)
-❌ NÃO faça fork deste repositório.
 
-Este repositório é fornecido como modelo/base. Para realizar o desafio, você deve:
-✅ Opção correta (obrigatória)
-  Clique em “Use this template” (se este repositório estiver marcado como Template)
-OU
-  Clone este repositório e crie um NOVO repositório público em sua conta GitHub.
-📌 O resultado deve ser um repositório próprio, independente deste.
+Olá, como vai?
 
-## 🎯 Objetivo
-Criar solução completa em camadas (DB, EJB, Backend, Frontend), corrigindo bug em EJB e entregando aplicação funcional.
+O desafio foi interessante. Eu comecei analisando as tarefas e fiz um esboço da arquitetura que no meu entendimento ficou assim:
+![arquitetura.png](arquitetura.png)
 
-## 📦 Estrutura
-- db/: scripts schema e seed
-- ejb-module/: serviço EJB com bug a ser corrigido
-- backend-module/: backend Spring Boot
-- frontend/: app Angular
-- docs/: instruções e critérios
-- .github/workflows/: CI
+O serviço EJB se comunica com o banco de dados, o spring boot faz a intermediação, aqui poderiamos ter um banco auxiliar noSQL de logs por exemplo, essa implementação não contempla.
 
-## ✅ Tarefas do candidato
-1. Executar db/schema.sql e db/seed.sql
-2. Corrigir bug no BeneficioEjbService
-3. Implementar backend CRUD + integração com EJB
-4. Desenvolver frontend Angular consumindo backend
-5. Implementar testes
-6. Documentar (Swagger, README)
-7. Submeter via fork + PR
+Depois disso fui para a implementação do codigo, no EJB utilizei Jakarta EE porém não usei as implementações modernas de Repository e sim o padrão DAO, com typed queries, usando diretiva de Transaction e o @Version para assegurar Optimistic Lock.
 
-## 🐞 Bug no EJB
-- Transferência não verifica saldo, não usa locking, pode gerar inconsistência
-- Espera-se correção com validações, rollback, locking/optimistic locking
+No backend usei o OpenFeign para a comunicação com as APIs do EJB, poderia usar o Kafka mas assumi que esse serviço é de pouco acesso e o acesso via REST poderia ser o mais adequado nesse contexto
 
-## 📊 Critérios de avaliação
-- Arquitetura em camadas (20%)
-- Correção EJB (20%)
-- CRUD + Transferência (15%)
-- Qualidade de código (10%)
-- Testes (15%)
-- Documentação (10%)
-- Frontend (10%)
+No front end usei o angular 20 LTS com a abordagem relativamente nova signals junto com um framework css chamado bulma que é bem leve e bonito.
+
+Acredito que com mais tempo poderia fazer mais melhorias, espero que gostem.  
+
+Abraço.
