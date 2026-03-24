@@ -1,14 +1,20 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import {CurrencyPipe} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {BeneficioService} from '../../../services/beneficio.service';
 import {AlertService} from '../../../shared/alert/alert.service';
+import {LoadingService} from '../../../services/loading.service';
+import {LoadingComponent} from '../../../shared/loading/loading.component';
+import {Page} from '../../../models/page.model';
+import {Beneficio} from '../../../models/beneficio.model';
+import {PageRequest} from '../../../models/page-request.model';
 
 @Component({
   selector: 'app-beneficio-list',
   imports: [
     CurrencyPipe,
-    RouterLink
+    RouterLink,
+    LoadingComponent
   ],
   templateUrl: './beneficio-list.component.html',
   styleUrls: ['./beneficio-list.component.css']
@@ -16,13 +22,15 @@ import {AlertService} from '../../../shared/alert/alert.service';
 export class BeneficioListComponent {
   beneficioService = inject(BeneficioService);
   alertService = inject(AlertService);
-  pageBeneficios = this.beneficioService.pageBeneficios;
-  beneficios = this.beneficioService.beneficios;
+  loadingService = inject(LoadingService);
+  pageBeneficios = signal<Page<Beneficio>>({number: 0, content: [], first: false, last: false, size: 0, totalElements: 0, totalPages: 0});
+  beneficios = signal<Beneficio[]>([]);
+  beneficio = signal<Beneficio>({id: 0, nome: '', descricao: '', valor: 0, ativo: true});
+  loading = this.loadingService.loading;
   successAlertOptions = {autoClose: true, keepAfterRouteChange: true};
-  warnAlertOptions = {autoClose: true, keepAfterRouteChange: false};
 
   ngOnInit(): void {
-    this.beneficioService.findByPage();
+    this.findByPage();
   }
 
   get totalPages() {
@@ -45,7 +53,13 @@ export class BeneficioListComponent {
 
   goToPage(page: number): void {
     let pageRequest = {number: page};
-    this.beneficioService.findByPage(pageRequest);
+    this.findByPage(pageRequest);
+  }
+
+  findByPage(pageRequest?: PageRequest) {
+    this.beneficioService.findByPage(pageRequest).subscribe((response) => {
+      this.pageBeneficios.set(response);
+    })
   }
 
   delete(id?: number) {
@@ -53,10 +67,9 @@ export class BeneficioListComponent {
       this.beneficioService.delete(id).subscribe({
         next: (response) => {
           this.alertService.success("Beneficio deletado com sucesso", [], this.successAlertOptions);
-          this.beneficioService.findByPage();
+          this.findByPage();
         },
         error: (err) => {
-          this.alertService.warn("Ocorreu um erro no servidor. Não foi possível deletar", [], this.warnAlertOptions);
         }
       });
     }

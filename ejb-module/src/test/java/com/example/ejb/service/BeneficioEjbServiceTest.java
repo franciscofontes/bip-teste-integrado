@@ -5,7 +5,6 @@ import com.example.ejb.exception.BeneficioException;
 import com.example.ejb.model.Beneficio;
 import com.example.ejb.utils.MessageUtils;
 import com.example.ejb.utils.MockUtils;
-import jakarta.persistence.PersistenceException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

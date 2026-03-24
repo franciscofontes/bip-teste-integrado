@@ -1,6 +1,7 @@
 package com.example.ejb.controller;
 
 import com.example.ejb.dto.BeneficioResponseDTO;
+import com.example.ejb.dto.BeneficioResponseDetailsDTO;
 import com.example.ejb.dto.TransferDTO;
 import com.example.ejb.exception.BeneficioException;
 import com.example.ejb.model.Beneficio;
@@ -53,7 +54,7 @@ class BeneficioEjbControllerTest {
 
         var id = 1L;
         var beneficio = MockUtils.fromFile("beneficio-valid-01.json", Beneficio.class);
-        var beneficioResponseDTO = MockUtils.fromFile("beneficio-response-dto-valid-01.json", BeneficioResponseDTO.class);
+        var beneficioResponseDetailsDTO = MockUtils.fromFile("beneficio-response-details-dto-valid-01.json", BeneficioResponseDetailsDTO.class);
 
         when(service.findById(id)).thenReturn(beneficio);
 
@@ -61,7 +62,7 @@ class BeneficioEjbControllerTest {
 
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
         assertNotNull(response.getEntity());
-        assertEquals(beneficioResponseDTO.nome(), ((BeneficioResponseDTO) response.getEntity()).nome());
+        assertEquals(beneficioResponseDetailsDTO.nome(), ((BeneficioResponseDetailsDTO) response.getEntity()).nome());
     }
 
     @Test

@@ -3,6 +3,7 @@ package com.example.backend.service;
 import com.example.backend.client.BeneficioClient;
 import com.example.backend.dto.BeneficioRequestDTO;
 import com.example.backend.dto.BeneficioResponseDTO;
+import com.example.backend.dto.BeneficioResponseDetailsDTO;
 import com.example.backend.dto.TransferDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class BeneficioService {
         return client.findByPage(number, size, orderBy, direction);
     }
 
-    public BeneficioResponseDTO findById(Long id) {
+    public BeneficioResponseDetailsDTO findById(Long id) {
         return client.findById(id);
     }
 

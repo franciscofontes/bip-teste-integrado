@@ -4,6 +4,7 @@ import com.example.ejb.dto.BeneficioRequestDTO;
 import com.example.ejb.dto.BeneficioResponseDTO;
 import com.example.ejb.dto.TransferDTO;
 import com.example.ejb.mapper.BeneficioRequestMapper;
+import com.example.ejb.mapper.BeneficioResponseDetailsMapper;
 import com.example.ejb.mapper.BeneficioResponseMapper;
 import com.example.ejb.model.Beneficio;
 import com.example.ejb.model.Page;
@@ -55,8 +56,8 @@ public class BeneficioEjbController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response findById(@PathParam("id") Long id) {
         var beneficio = service.findById(id);
-        var beneficioResponseDTO = new BeneficioResponseMapper().toDTO(beneficio);
-        return Response.ok(beneficioResponseDTO).build();
+        var beneficioResponseDetailsDTO = new BeneficioResponseDetailsMapper().toDTO(beneficio);
+        return Response.ok(beneficioResponseDetailsDTO).build();
     }
 
     @POST

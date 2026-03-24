@@ -2,20 +2,16 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.BeneficioRequestDTO;
 import com.example.backend.dto.BeneficioResponseDTO;
+import com.example.backend.dto.BeneficioResponseDetailsDTO;
 import com.example.backend.dto.TransferDTO;
 import com.example.backend.service.BeneficioService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -47,7 +43,7 @@ public class BeneficioController {
 
     @Operation(summary = "Listar beneficio pelo identificador", description = "Retorna beneficio cadastrado")
     @GetMapping("/{id}")
-    public BeneficioResponseDTO findById(@PathVariable Long id) {
+    public BeneficioResponseDetailsDTO findById(@PathVariable Long id) {
         return service.findById(id);
     }
 

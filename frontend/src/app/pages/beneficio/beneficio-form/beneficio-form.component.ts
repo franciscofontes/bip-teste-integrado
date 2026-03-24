@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {BeneficioService} from '../../../services/beneficio.service';
 import {AlertService} from '../../../shared/alert/alert.service';
+import {LoadingService} from '../../../services/loading.service';
 
 @Component({
   selector: 'app-beneficio-form',
@@ -17,13 +18,14 @@ export class BeneficioFormComponent implements OnInit {
   fb = inject(FormBuilder);
   beneficioService = inject(BeneficioService);
   alertService = inject(AlertService);
+  loadingService = inject(LoadingService);
   router = inject(Router);
   route = inject(ActivatedRoute);
+  loading = this.loadingService.loading;
   form!: FormGroup;
   isEdit = false;
   beneficioId?: number;
   successAlertOptions = {autoClose: true, keepAfterRouteChange: true};
-  warnAlertOptions = {autoClose: true, keepAfterRouteChange: false};
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -32,13 +34,22 @@ export class BeneficioFormComponent implements OnInit {
       valor: ['', [Validators.required, Validators.min(0)]],
       ativo: [true],
     });
+    this.fill();
+  }
+
+  private fill() {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isEdit = true;
       this.beneficioId = +id;
-      const beneficio = this.beneficioService.pageBeneficios().content.find(b => b.id === this.beneficioId);
-      if (beneficio) this.form.patchValue(beneficio);
+      this.findById(this.beneficioId);
     }
+  }
+
+  private findById(id: number) {
+    this.beneficioService.findById(id).subscribe((response) => {
+      this.form.patchValue(response);
+    });
   }
 
   save() {
@@ -51,7 +62,6 @@ export class BeneficioFormComponent implements OnInit {
           this.router.navigate(['../..'], {relativeTo: this.route}).then(r => '');
         },
         error: (err) => {
-          this.alertService.warn("Ocorreu um erro no servidor. Não foi possível atualizar", [], this.warnAlertOptions);
         }
       });
     } else {
@@ -61,7 +71,6 @@ export class BeneficioFormComponent implements OnInit {
           this.router.navigate(['..'], {relativeTo: this.route}).then(r => '');
         },
         error: (err) => {
-          this.alertService.warn("Ocorreu um erro no servidor. Não foi possível cadastrar", [], this.warnAlertOptions);
         }
       });
     }

@@ -11,31 +11,22 @@ export class BeneficioService {
   private http = inject(HttpClient);
   private apiUrl = 'http://localhost:8080/api/v1/beneficios';
   pageRequest: PageRequest | undefined;
-  pageBeneficios = signal<Page<Beneficio>>({number: 0, content: [], first: false, last: false, size: 0, totalElements: 0, totalPages: 0});
-  beneficios = signal<Beneficio[]>([]);
-  beneficio = signal<Beneficio>({id: 0, nome: '', descricao: '', valor: 0, ativo: true});
 
   constructor() {
   }
 
   findAll() {
-    return this.http.get<Beneficio[]>(this.apiUrl).subscribe(data => {
-      this.beneficios.set(data);
-    });
+    return this.http.get<Beneficio[]>(this.apiUrl);
   }
 
   findByPage(pageRequest?: PageRequest) {
     this.pageRequest = pageRequest;
     let params = this.fillPageParams(pageRequest);
-    this.http.get<Page<Beneficio>>(this.apiUrl + '/page', {params}).subscribe(pageResponse => {
-      this.pageBeneficios.set(pageResponse);
-    });
+    return this.http.get<Page<Beneficio>>(this.apiUrl + '/page', {params});
   }
 
   findById(id: number) {
-    this.http.get<Beneficio>(this.apiUrl + "/" + id).subscribe(data => {
-      this.beneficio.set(data);
-    });
+    return this.http.get<Beneficio>(this.apiUrl + "/" + id);
   }
 
   create(beneficio: Beneficio) {

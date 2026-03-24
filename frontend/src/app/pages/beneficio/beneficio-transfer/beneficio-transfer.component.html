@@ -8,7 +8,7 @@
     <div class="field">
       <label class="label">Beneficio de origem</label>
       <div class="control">
-        <input disabled class="input" type="text" value="{{ fromId + ' - ' + fromNome }}"
+        <input disabled class="input" type="text" value="{{ beneficioOrigem().id + ' - ' + beneficioOrigem().nome }}"
                placeholder="Origem">
       </div>
       <p class="help"></p>
@@ -31,22 +31,30 @@
 
     <div class="field">
       <label class="label">Beneficio de destino</label>
-      <div class="control">
-        <div class="select is-fullwidth">
-          <select (change)="select($event)">
-            <option value="" disabled selected>Select an option</option>
-            @for (beneficio of beneficios; track beneficio.id) {
-              <option value="{{beneficio.id}}">
-                {{ beneficio.id + ' - ' + beneficio.nome }}
-              </option>
-            }
-          </select>
-        </div>
-      </div>
+      @if (localLoading) {
+        <span class="button is-large is-responsive is-loading" style="border: none"></span>
+      } @else {
+        @if (beneficiosDestino().length > 0) {
+          <div class="control">
+            <div class="select is-fullwidth">
+              <select (change)="select($event)">
+                <option value="" disabled selected>Selecione um benefício para receber a transferência</option>
+                @for (beneficio of beneficiosDestino(); track beneficio.id) {
+                  <option value="{{beneficio.id}}">
+                    {{ beneficio.id + ' - ' + beneficio.nome }}
+                  </option>
+                }
+              </select>
+            </div>
+          </div>
+        } @else {
+          <p>Nenhum registro encontrado.</p>
+        }
+      }
     </div>
 
     <div class="buttons">
-      <button type="submit" [disabled]="form.invalid" class="button is-success">
+      <button type="submit" [disabled]="form.invalid || loading()" class="button is-success {{ loading() ? 'is-loading' : '' }}">
         <span class="icon is-small">
           <i class="material-icons">check</i>
         </span>

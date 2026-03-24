@@ -1,9 +1,11 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {BeneficioService} from '../../../services/beneficio.service';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {Beneficio} from '../../../models/beneficio.model';
 import {AlertService} from '../../../shared/alert/alert.service';
+import {concatMap} from 'rxjs';
+import {LoadingService} from '../../../services/loading.service';
 
 @Component({
   selector: 'app-beneficio-transfer',
@@ -18,16 +20,17 @@ export class BeneficioTransferComponent {
   fb = inject(FormBuilder);
   beneficioService = inject(BeneficioService);
   alertService = inject(AlertService);
+  loadingService = inject(LoadingService);
   router = inject(Router);
   route = inject(ActivatedRoute);
+  loading = this.loadingService.loading;
+  localLoading = false;
   form!: FormGroup;
   fromId?: number;
-  fromNome?: string;
   toId?: number;
-  beneficio: Beneficio = this.beneficioService.beneficio();
-  beneficios: Beneficio[] = this.beneficioService.beneficios();
+  beneficioOrigem = signal<Beneficio>({id: 0, nome: '', descricao: '', valor: 0, ativo: true});
+  beneficiosDestino = signal<Beneficio[]>([]);
   successAlertOptions = {autoClose: true, keepAfterRouteChange: true};
-  warnAlertOptions = {autoClose: true, keepAfterRouteChange: false};
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -38,14 +41,18 @@ export class BeneficioTransferComponent {
 
   fill() {
     const fromId = this.route.snapshot.paramMap.get('fromId');
-    const fromNome = this.route.snapshot.paramMap.get('fromNome');
-    this.beneficioService.findAll();
     if (fromId) {
+      this.localLoading = true;
       this.fromId = +fromId;
-      if (this.beneficio) this.form.patchValue(this.beneficio);
-    }
-    if (fromNome) {
-      this.fromNome = fromNome;
+      this.beneficioService.findById(this.fromId).pipe(
+        concatMap(beneficio => {
+          this.beneficioOrigem.set(beneficio);
+          return this.beneficioService.findAll();
+        })
+      ).subscribe(beneficios => {
+        this.localLoading = false;
+        this.beneficiosDestino.set(beneficios);
+      });
     }
   }
 
@@ -65,7 +72,6 @@ export class BeneficioTransferComponent {
         this.router.navigate(['..'], {relativeTo: this.route}).then(r => '');
       },
       error: (err) => {
-        this.alertService.success("Ocorreu um erro no servidor. Não foi possível transferir", [], this.warnAlertOptions);
       }
     });
   }

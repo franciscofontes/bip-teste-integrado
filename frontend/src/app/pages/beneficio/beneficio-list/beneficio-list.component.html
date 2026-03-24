@@ -11,69 +11,80 @@
     </a>
   </div>
 
-  <h2 class="subtitle"><b>Lista de beneficios.</b> Total de beneficios: {{ pageBeneficios().totalElements }}</h2>
+  <h2 class="subtitle is-inline">
+    <b>Lista de beneficios.</b>
+    Total de beneficios: {{ pageBeneficios().totalElements }}
+  </h2>
 
-  <table class="table is-fullwidth is-striped">
-    <thead>
-    <tr>
-      <th>ID</th>
-      <th>Nome</th>
-      <th>Valor</th>
-      <th>Ativo</th>
-      <th>Ações</th>
-    </tr>
-    </thead>
-    <tbody>
-      @for (beneficio of pageBeneficios().content; track beneficio.id) {
-        <tr>
-          <td>{{ beneficio.id }}</td>
-          <td>{{ beneficio.nome }}</td>
-          <td>{{ beneficio.valor | currency:'BRL' }}</td>
-          <td>{{ beneficio.ativo ? 'Sim' : 'Não' }}</td>
-          <td>
-            <div class="buttons">
-              <a [routerLink]="['editar', beneficio.id]" class="button is-info">
-                <span class="icon is-small">
-                  <i class="material-icons">edit</i>
-                </span>
-                <span>Editar</span>
-              </a>
-              <a [routerLink]="['transfer', beneficio.id, beneficio.nome]" class="button is-info">
-                <span class="icon is-small">
-                  <i class="material-icons">currency_exchange</i>
-                </span>
-                <span>Transferir</span>
-              </a>
-              <button (click)="delete(beneficio.id)" class="button is-danger">
-                <span class="icon is-small">
-                  <i class="material-icons">delete</i>
-                </span>
-                <span>Deletar</span>
-              </button>
-            </div>
-          </td>
-        </tr>
-      } @empty {
-      }
-    </tbody>
-  </table>
+  <app-loading/>
 
-  <nav class="pagination" role="navigation" aria-label="pagination">
-    <a (click)="goToPreviousPage()" class="pagination-previous {{ pageBeneficios().first ? 'is-disabled' : '' }}">Página
-      anterior</a>
-    <a (click)="goToNextPage()" class="pagination-next {{ pageBeneficios().last ? 'is-disabled' : '' }}">Próxima
-      página</a>
-    <ul class="pagination-list">
-      @for (page of totalPages; track page) {
-        <li>
-          <a
-            (click)="goToPage(page)"
-            class="pagination-link {{ pageBeneficios().number === page ? 'is-current' : '' }}"
-            aria-label="Page {{page + 1}}"
-            aria-current="page">{{ page + 1 }}</a>
-        </li>
-      }
-    </ul>
-  </nav>
+  @if (pageBeneficios().content.length > 0) {
+    <table class="table is-fullwidth is-striped">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Valor</th>
+        <th>Ativo</th>
+        <th>Ações</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (beneficio of pageBeneficios().content; track beneficio.id) {
+          <tr>
+            <td>{{ beneficio.id }}</td>
+            <td>{{ beneficio.nome }}</td>
+            <td>{{ beneficio.valor | currency:'BRL' }}</td>
+            <td>{{ beneficio.ativo ? 'Sim' : 'Não' }}</td>
+            <td>
+              <div class="buttons">
+                <a [routerLink]="['editar', beneficio.id]" class="button is-link">
+                  <span class="icon is-small">
+                    <i class="material-icons">edit</i>
+                  </span>
+                  <span>Editar</span>
+                </a>
+                <a [routerLink]="['transfer', beneficio.id]" class="button is-link">
+                  <span class="icon is-small">
+                    <i class="material-icons">currency_exchange</i>
+                  </span>
+                    <span>Transferir</span>
+                </a>
+                <button [disabled]="loading()" (click)="delete(beneficio.id)"
+                        class="button is-danger {{ loading() ? 'is-loading' : '' }}">
+                  <span class="icon is-small">
+                    <i class="material-icons">delete</i>
+                  </span>
+                  <span>Deletar</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        } @empty {
+        }
+      </tbody>
+    </table>
+
+    <nav class="pagination" role="navigation" aria-label="pagination">
+      <a (click)="goToPreviousPage()" class="pagination-previous {{ pageBeneficios().first ? 'is-disabled' : '' }}">Página
+        anterior</a>
+      <a (click)="goToNextPage()" class="pagination-next {{ pageBeneficios().last ? 'is-disabled' : '' }}">Próxima
+        página</a>
+      <ul class="pagination-list">
+        @for (page of totalPages; track page) {
+          <li>
+            <a
+              (click)="goToPage(page)"
+              class="pagination-link {{ pageBeneficios().number === page ? 'is-current' : '' }}"
+              aria-label="Page {{page + 1}}"
+              aria-current="page">{{ page + 1 }}</a>
+          </li>
+        }
+      </ul>
+    </nav>
+
+  } @else {
+    <p> Nenhum registro encontrado. </p>
+  }
 
 </section>

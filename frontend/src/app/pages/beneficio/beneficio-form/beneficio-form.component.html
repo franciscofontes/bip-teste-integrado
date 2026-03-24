@@ -59,7 +59,7 @@
     </div>
 
     <div class="buttons">
-      <button type="submit" [disabled]="form.invalid" class="button is-success">
+      <button type="submit" [disabled]="form.invalid || loading()" class="button is-success {{ loading() ? 'is-loading' : '' }}">
         <span class="icon is-small">
           <i class="material-icons">check</i>
         </span>

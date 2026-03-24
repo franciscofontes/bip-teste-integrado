@@ -2,6 +2,7 @@ package com.example.backend.client;
 
 import com.example.backend.dto.BeneficioRequestDTO;
 import com.example.backend.dto.BeneficioResponseDTO;
+import com.example.backend.dto.BeneficioResponseDetailsDTO;
 import com.example.backend.dto.TransferDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
@@ -23,7 +24,7 @@ public interface BeneficioClient {
             @RequestParam(value = "direction", defaultValue = "DESC") String direction);
 
     @GetMapping("{id}")
-    BeneficioResponseDTO findById(@PathVariable("id") Long id);
+    BeneficioResponseDetailsDTO findById(@PathVariable("id") Long id);
 
     @PostMapping()
     void create(@RequestBody BeneficioRequestDTO dto);
